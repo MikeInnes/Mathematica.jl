@@ -1,0 +1,13 @@
+name = "Mathematica"
+uuid = "f648be94-fd14-429f-aa16-12a8ae75336b"
+authors = ["Peng Guanwen <pg999w@outlook.com>"]
+version = "0.1.0"
+
+[deps]
+MathLink = "18c93696-a329-5786-9845-8443133fa0b4"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
