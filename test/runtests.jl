@@ -6,6 +6,9 @@ using MathLink: @W_str
     @test buildexpr(1) == 1
     @test buildexpr("s") == "s"
     @test buildexpr(:x) == W"x"
+    @test buildexpr([1,2,3]) == W"List"(1,2,3)
+    @test buildexpr([1 2; 3 4]) == W"List"(W"List"(1, 2), W"List"(3, 4))
+    @test buildexpr(1//2) == W"Rational"(1, 2)
 end
 
 @testset "operators" begin

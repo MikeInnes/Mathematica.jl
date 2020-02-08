@@ -8,9 +8,7 @@ export weval
 
 weval(e) = MathLink.weval(buildexpr(e))
 
-buildexpr(s::Symbol) = WSymbol(s)
-buildexpr(e::Any) = e
-
+include("types.jl")
 include("operators.jl")
 
 end # module
