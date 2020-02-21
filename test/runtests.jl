@@ -1,5 +1,5 @@
 using Test
-using Mathematica: weval, buildexpr
+using Mathematica: weval, buildexpr, getexpr
 using MathLink: @W_str
 
 @testset "buildexpr" begin
@@ -9,6 +9,15 @@ using MathLink: @W_str
     @test buildexpr([1,2,3]) == W"List"(1,2,3)
     @test buildexpr([1 2; 3 4]) == W"List"(W"List"(1, 2), W"List"(3, 4))
     @test buildexpr(1//2) == W"Rational"(1, 2)
+    @test buildexpr(:x=>1) == W"Rule"(W"x", 1)
+end
+
+@testset "getexpr" begin
+    @test getexpr(W"List"(1, 2, 3)) == [1, 2, 3]
+    @test getexpr(W"List"(W"List"(1, 2), W"List"(3, 4))) == [1 2; 3 4]
+    @test getexpr(W"List"(W"List"(1, 2, 3), W"List"(4, 5, 6))) == [1 2 3; 4 5 6]
+    arr = reshape(1:12, 2, 3, 2)
+    @test getexpr(buildexpr(arr)) == arr
 end
 
 @testset "operators" begin
