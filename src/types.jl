@@ -12,10 +12,13 @@ buildexpr(e::Any) = e
 
 
 getexpr(e::Any) = e
+getexpr(e::WSymbol) = Symbol(e.name)
 getexpr(e::WExpr) = getexpr(Any, e)
 function getexpr(::Type{Any}, e::WExpr)
     if e.head == WSymbol("Rational")
         getexpr(Rational, e)
+    elseif e.head == WSymbol("Rule")
+        getexpr(Pair, e)
     elseif e.head == WSymbol("List")
         getexpr(Array, e)
     else
@@ -24,6 +27,7 @@ function getexpr(::Type{Any}, e::WExpr)
 end
 
 getexpr(::Type{Rational}, e) = Rational(getexpr.(e.args)...)
+getexpr(::Type{Pair}, e) = Pair(getexpr(e.args[1]), getexpr(e.args[2]))
 function getexpr(::Type{Array}, e)
     s, ty = getsize(e)
     arr = Array{ty}(undef, prod(s))

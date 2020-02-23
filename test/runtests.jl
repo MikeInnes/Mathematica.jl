@@ -18,6 +18,7 @@ end
     @test getexpr(W"List"(W"List"(1, 2, 3), W"List"(4, 5, 6))) == [1 2 3; 4 5 6]
     arr = reshape(1:12, 2, 3, 2)
     @test getexpr(buildexpr(arr)) == arr
+    @test getexpr(W"Rule"(1, W"x")) == (1=>:x)
 end
 
 @testset "operators" begin
