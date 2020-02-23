@@ -10,6 +10,7 @@ using MathLink: @W_str
     @test buildexpr([1 2; 3 4]) == W"List"(W"List"(1, 2), W"List"(3, 4))
     @test buildexpr(1//2) == W"Rational"(1, 2)
     @test buildexpr(:x=>1) == W"Rule"(W"x", 1)
+    @test buildexpr(:f(:x, (1, 2))) == buildexpr(:f(:x, [1, 2])) == W"f"(W"x", W"List"(1, 2))
 end
 
 @testset "getexpr" begin

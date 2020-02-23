@@ -5,7 +5,7 @@ function buildexpr(s::AbstractArray)
     nested = [s[i, colons...] for i in 1:size(s)[1]]
     WSymbol("List")(buildexpr.(nested)...)
 end
-buildexpr(s::Tuple) = WSymbol("List")(buildexpr.(s))
+buildexpr(s::Tuple) = WSymbol("List")(buildexpr.(s)...)
 
 buildexpr(s::Rational) = WSymbol("Rational")(buildexpr(s.num), buildexpr(s.den))
 buildexpr(s::Pair) = WSymbol("Rule")(buildexpr(s.first), buildexpr(s.second))
