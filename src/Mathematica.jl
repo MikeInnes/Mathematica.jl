@@ -7,9 +7,10 @@ import IterTools: takewhile
 
 export weval
 
-weval(e) = MathLink.weval(buildexpr(e))
+weval(e) = MathLink.weval(buildexpr(e)) |> getexpr
 
 include("types.jl")
 include("operators.jl")
+include("show.jl")
 
 end # module
