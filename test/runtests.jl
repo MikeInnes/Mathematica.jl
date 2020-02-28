@@ -11,6 +11,7 @@ using MathLink: @W_str
     @test buildexpr(1//2) == W"Rational"(1, 2)
     @test buildexpr(:x=>1) == W"Rule"(W"x", 1)
     @test buildexpr(:f(:x, (1, 2))) == buildexpr(:f(:x, [1, 2])) == W"f"(W"x", W"List"(1, 2))
+    @test buildexpr(Dict(:a => 1, :b => 2)) == W"Association"(W"Rule"(W"a", 1), W"Rule"(W"b", 2))
 end
 
 @testset "getexpr" begin
@@ -20,6 +21,7 @@ end
     arr = reshape(1:12, 2, 3, 2)
     @test getexpr(buildexpr(arr)) == arr
     @test getexpr(W"Rule"(1, W"x")) == (1=>:x)
+    @test getexpr(W"Association"(W"Rule"(W"a", 1), W"Rule"(W"b", 2))) == Dict(:a => 1, :b => 2)
 end
 
 @testset "operators" begin

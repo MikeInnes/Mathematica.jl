@@ -6,22 +6,25 @@ function buildexpr(s::AbstractArray)
     WSymbol("List")(buildexpr.(nested)...)
 end
 buildexpr(s::Tuple) = WSymbol("List")(buildexpr.(s)...)
-
+buildexpr(s::Dict) = WSymbol("Association")(buildexpr.(collect(s))...)
 buildexpr(s::Rational) = WSymbol("Rational")(buildexpr(s.num), buildexpr(s.den))
 buildexpr(s::Pair) = WSymbol("Rule")(buildexpr(s.first), buildexpr(s.second))
 buildexpr(e::Any) = e
 
+const headstype = Dict(
+    "Rational" => Rational,
+    "Rule" => Pair,
+    "List" => Array,
+    "Association" => Dict,
+)
 
 getexpr(e::Any) = e
 getexpr(e::WSymbol) = Symbol(e.name)
 getexpr(e::WExpr) = getexpr(Any, e)
 function getexpr(::Type{Any}, e::WExpr)
-    if e.head == WSymbol("Rational")
-        getexpr(Rational, e)
-    elseif e.head == WSymbol("Rule")
-        getexpr(Pair, e)
-    elseif e.head == WSymbol("List")
-        getexpr(Array, e)
+    name = e.head.name
+    if haskey(headstype, name)
+        getexpr(headstype[name], e)
     else
         e
     end
@@ -29,6 +32,7 @@ end
 
 getexpr(::Type{Rational}, e) = Rational(getexpr.(e.args)...)
 getexpr(::Type{Pair}, e) = Pair(getexpr(e.args[1]), getexpr(e.args[2]))
+getexpr(::Type{Dict}, e) = Dict(getexpr.(e.args))
 function getexpr(::Type{Array}, e)
     s, ty = getsize(e)
     arr = Array{ty}(undef, prod(s))
