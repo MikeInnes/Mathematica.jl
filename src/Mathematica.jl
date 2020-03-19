@@ -5,12 +5,11 @@ import MathLink
 import MathLink: WExpr, WSymbol
 import IterTools: takewhile
 
-export weval
-
-weval(e) = MathLink.weval(buildexpr(e)) |> getexpr
+export weval, @importsymbol
 
 include("types.jl")
 include("operators.jl")
 include("show.jl")
+include("eval.jl")
 
 end # module
